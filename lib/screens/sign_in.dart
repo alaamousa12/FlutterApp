@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/welcome_page.dart';
+import 'package:flutter_application_1/screens/home_page.dart';
 import 'package:flutter_application_1/widgets/app_bottom.dart';
 
 class SignInPage extends StatefulWidget {
@@ -73,10 +73,17 @@ class _SignInPageState extends State<SignInPage> {
                     if (kDebugMode) {
                       print("Logged in");
                     }
-                    Navigator.push(
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => WelcomePage(
+                    //             phoneNumber: phoneNumberController.text,
+                    //           )),
+                    // );
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => WelcomePage(
+                          builder: (context) => HomePage(
                                 phoneNumber: phoneNumberController.text,
                               )),
                     );
