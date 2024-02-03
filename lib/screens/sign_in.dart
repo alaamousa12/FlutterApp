@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app_setting.dart';
 import 'package:flutter_application_1/screens/home_page.dart';
 import 'package:flutter_application_1/widgets/app_bottom.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -68,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
               AppBottom(
                 label: "Log in",
                 color: Colors.blue[300]!,
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     if (kDebugMode) {
                       print("Logged in");
@@ -80,12 +82,13 @@ class _SignInPageState extends State<SignInPage> {
                     //             phoneNumber: phoneNumberController.text,
                     //           )),
                     // );
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setString(AppSettings.phoneNumberSharedPrefsKey,
+                        phoneNumberController.text);
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                phoneNumber: phoneNumberController.text,
-                              )),
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                     // phoneNumberController.clear();
                     passwordController.clear();
@@ -95,7 +98,7 @@ class _SignInPageState extends State<SignInPage> {
               const SizedBox(
                 height: 15,
               ),
-              const Text("Forgot password? no yawa, Tap me"),
+              const Text("Forgot password?. Tap me"),
               const SizedBox(
                 height: 15,
               ),
@@ -103,7 +106,9 @@ class _SignInPageState extends State<SignInPage> {
                 label: "No account, sign up",
                 color: Colors.grey,
                 onTap: () {
-                  print("Sign up");
+                  if (kDebugMode) {
+                    print("Sign up");
+                  }
                 },
               ),
             ],

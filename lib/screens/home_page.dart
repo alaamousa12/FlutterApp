@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app_setting.dart';
 import 'package:flutter_application_1/screens/nav_bar_pages/categorise_screen.dart';
 import 'package:flutter_application_1/screens/nav_bar_pages/main_screen.dart';
 import 'package:flutter_application_1/screens/nav_bar_pages/setting_screen.dart';
 import 'package:flutter_application_1/screens/sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String phoneNumber;
-  const HomePage({super.key, required this.phoneNumber});
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -32,11 +35,8 @@ class _HomePageState extends State<HomePage> {
                 height: 100,
               ),
               InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
-                  );
+                onTap: () async {
+                  _showMyDialog();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.category), label: "categories"),
+                icon: Icon(Icons.category), label: "Categorise"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: "Settings"),
           ]),
@@ -63,5 +63,45 @@ class _HomePageState extends State<HomePage> {
   onNavBarTapped(int index) {
     pageIndex = index;
     setState(() {});
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Signout'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you wanna sign out?'),
+                Text('You well need to login again.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Yea'),
+              onPressed: () async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                await prefs.remove(AppSettings.phoneNumberSharedPrefsKey);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInPage()),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
