@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/app_setting.dart';
-import 'package:flutter_application_1/screens/home_page.dart';
-import 'package:flutter_application_1/widgets/app_bottom.dart';
+import 'package:flutter_application_1/views/screens/home_page.dart';
+import 'package:flutter_application_1/views/widgets/app_bottom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
@@ -25,13 +25,11 @@ class _SignInPageState extends State<SignInPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 150,
-              ),
+              const SizedBox(height: 50),
               SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: Image.asset("assets/alahly.png")),
+                  width: 150,
+                  height: 150,
+                  child: Image.asset("assets/images.jpg")),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
@@ -53,21 +51,17 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                  ),
+                  decoration: const InputDecoration(labelText: "Password"),
                   validator: (value) {
                     if (value!.length < 8) {
-                      return "invalid password";
+                      return "invalid Password";
                     }
                     return null;
                   },
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              AppBottom(
+              // DRY Don't repeat yourself
+              AppButton(
                 label: "Log in",
                 color: Colors.blue[300]!,
                 onTap: () async {
@@ -75,34 +69,28 @@ class _SignInPageState extends State<SignInPage> {
                     if (kDebugMode) {
                       print("Logged in");
                     }
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => WelcomePage(
-                    //             phoneNumber: phoneNumberController.text,
-                    //           )),
-                    // );
                     final SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     await prefs.setString(AppSettings.phoneNumberSharedPrefsKey,
                         phoneNumberController.text);
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => const HomePage()),
                     );
                     // phoneNumberController.clear();
                     passwordController.clear();
                   }
                 },
               ),
+
               const SizedBox(
                 height: 15,
               ),
-              const Text("Forgot password?. Tap me"),
+              const Text("Forgot Password?. Tap me"),
               const SizedBox(
                 height: 15,
               ),
-              AppBottom(
+              AppButton(
                 label: "No account, sign up",
                 color: Colors.grey,
                 onTap: () {

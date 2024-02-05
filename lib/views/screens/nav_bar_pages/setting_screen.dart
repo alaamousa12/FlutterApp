@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/app_setting.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/core/settings_util.dart';
 
-class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<SettingScreen> createState() => _SettingScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingsScreenState extends State<SettingsScreen> {
   String userPhone = "";
   @override
   void initState() {
@@ -18,8 +17,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future<void> getUserPhoneNumber() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    userPhone = prefs.getString(AppSettings.phoneNumberSharedPrefsKey) ?? "--";
+    userPhone = await SettingsUtil.getCachedUserPhone();
     setState(() {});
   }
 
@@ -27,7 +25,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           radius: 50,
           child: Icon(
             Icons.person,
@@ -35,22 +33,22 @@ class _SettingScreenState extends State<SettingScreen> {
             size: 60,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Center(child: Text("User phone:$userPhone")),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
             color: Colors.grey[200],
-            child: ListTile(
+            child: const ListTile(
               leading: Icon(Icons.edit),
-              title: Text("Edit Prefile"),
+              title: Text("Edit Profile"),
               subtitle: Text("Manage your account"),
-              trailing: Icon(Icons.arrow_back_ios),
+              trailing: Icon(Icons.arrow_forward_ios),
             ),
           ),
         ),
@@ -58,11 +56,11 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             color: Colors.grey[200],
-            child: ListTile(
+            child: const ListTile(
               leading: Icon(Icons.settings),
               title: Text("App Settings"),
               subtitle: Text("Manage your Settings"),
-              trailing: Icon(Icons.arrow_back_ios),
+              trailing: Icon(Icons.arrow_forward_ios),
             ),
           ),
         ),
@@ -70,22 +68,27 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             color: Colors.grey[200],
-            child: ListTile(
+            child: const ListTile(
               leading: Icon(Icons.info),
               title: Text("About app"),
-              subtitle: Text("data about developer and appliction"),
-              trailing: Icon(Icons.arrow_back_ios),
+              subtitle: Text("data about developer and application"),
+              trailing: Icon(Icons.arrow_forward_ios),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            color: Colors.grey[200],
-            child: ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text("Signout"),
-              trailing: Icon(Icons.arrow_back_ios),
+        InkWell(
+          onTap: () {
+            SettingsUtil.signOutFlow(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: Colors.grey[200],
+              child: const ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Sign out"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
             ),
           ),
         ),
