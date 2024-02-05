@@ -29,7 +29,8 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                   width: 150,
                   height: 150,
-                  child: Image.asset("assets/images.jpg")),
+                  child: Image.network(
+                      "https://w7.pngwing.com/pngs/537/866/png-transparent-flutter-hd-logo.png")),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
